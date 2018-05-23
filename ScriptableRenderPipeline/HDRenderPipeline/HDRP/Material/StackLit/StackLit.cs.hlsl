@@ -30,8 +30,8 @@
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1308)
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_COAT_NORMAL (1309)
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_COAT_NORMAL_VIEW_SPACE (1310)
-#define DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH_A (1311)
-#define DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH_B (1312)
+#define DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH (1311)
+#define DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_COAT_NORMAL_LENGTH (1312)
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_SMOOTHNESS_A (1313)
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_SMOOTHNESS_B (1314)
 #define DEBUGVIEW_STACKLIT_SURFACEDATA_LOBE_MIXING (1315)
@@ -95,8 +95,8 @@ struct SurfaceData
     float3 normalWS;
     float3 geomNormalWS;
     float3 coatNormalWS;
-    float averageNormalLengthA;
-    float averageNormalLengthB;
+    float averageNormalLength;
+    float averageCoatNormalLength;
     float perceptualSmoothnessA;
     float perceptualSmoothnessB;
     float lobeMix;
@@ -189,11 +189,11 @@ void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout f
         case DEBUGVIEW_STACKLIT_SURFACEDATA_COAT_NORMAL_VIEW_SPACE:
             result = surfacedata.coatNormalWS * 0.5 + 0.5;
             break;
-        case DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH_A:
-            result = surfacedata.averageNormalLengthA.xxx;
+        case DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH:
+            result = surfacedata.averageNormalLength.xxx;
             break;
-        case DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_NORMAL_LENGTH_B:
-            result = surfacedata.averageNormalLengthB.xxx;
+        case DEBUGVIEW_STACKLIT_SURFACEDATA_AVERAGE_COAT_NORMAL_LENGTH:
+            result = surfacedata.averageCoatNormalLength.xxx;
             break;
         case DEBUGVIEW_STACKLIT_SURFACEDATA_SMOOTHNESS_A:
             result = surfacedata.perceptualSmoothnessA.xxx;

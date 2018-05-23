@@ -316,8 +316,8 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     surfaceData.normalWS = SurfaceGradientResolveNormal(input.worldToTangent[2], gradient.xyz);
     surfaceData.coatNormalWS = SurfaceGradientResolveNormal(input.worldToTangent[2], coatGradient.xyz);
 
-    surfaceData.averageNormalLengthA = gradient.w;
-    surfaceData.averageNormalLengthB = coatGradient.w;
+    surfaceData.averageNormalLength = gradient.w;
+    surfaceData.averageCoatNormalLength = coatGradient.w;
 
     // TODO: decal etc.
 

@@ -417,8 +417,8 @@ BSDFData ConvertSurfaceDataToBSDFData(SurfaceData surfaceData)
     bsdfData.perceptualRoughnessB = PerceptualSmoothnessToPerceptualRoughness(surfaceData.perceptualSmoothnessB);
 
     // Specular AA / Filtering.
-    bsdfData.perceptualRoughnessA = FilterRoughness(bsdfData.perceptualRoughnessA, bsdfData.geomNormalWS, surfaceData.averageNormalLengthA);
-    bsdfData.perceptualRoughnessB = FilterRoughness(bsdfData.perceptualRoughnessB, bsdfData.geomNormalWS, surfaceData.averageNormalLengthB);
+    bsdfData.perceptualRoughnessA = FilterRoughness(bsdfData.perceptualRoughnessA, bsdfData.geomNormalWS, surfaceData.averageNormalLength);
+    bsdfData.perceptualRoughnessB = FilterRoughness(bsdfData.perceptualRoughnessB, bsdfData.geomNormalWS, surfaceData.averageNormalLength);
     
     bsdfData.lobeMix = surfaceData.lobeMix;
 
@@ -449,13 +449,16 @@ BSDFData ConvertSurfaceDataToBSDFData(SurfaceData surfaceData)
 
     if (HasFeatureFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_STACK_LIT_COAT))
     {
+        FillMaterialCoatData(PerceptualSmoothnessToPerceptualRoughness(surfaceData.coatPerceptualSmoothness),
+                             surfaceData.coatIor, surfaceData.coatThickness, surfaceData.coatExtinction, bsdfData);
+
         if (HasFeatureFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_STACK_LIT_COAT_NORMAL_MAP))
         {
             bsdfData.coatNormalWS = surfaceData.coatNormalWS;
+            // Specular AA / Filtering.
+            bsdfData.coatPerceptualRoughness = FilterRoughness(bsdfData.coatPerceptualRoughness, bsdfData.geomNormalWS, surfaceData.averageCoatNormalLength);
         }
 
-        FillMaterialCoatData(PerceptualSmoothnessToPerceptualRoughness(surfaceData.coatPerceptualSmoothness),
-                             surfaceData.coatIor, surfaceData.coatThickness, surfaceData.coatExtinction, bsdfData);
 
         // vlayering:
         // We can't calculate final roughnesses including anisotropy right away in this case: we will either do it
