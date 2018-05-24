@@ -457,46 +457,49 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 EditorGUILayout.PropertyField(m_AdditionalLightData.applyRangeAttenuation, s_Styles.applyRangeAttenuation);
 
                 // Clip Planes
-		        EditorGUILayout.Space();
-                if (targets.Length > 1)
+                if(m_LightShape == LightShape.Point || m_LightShape == LightShape.Spot)
                 {
-        			EditorGUILayout.HelpBox("Cannot edit Clip Planes for multi-object", MessageType.Info);
-                }
-                else
-                {
-                    var ald = m_SerializedAdditionalLightData.targetObject as HDAdditionalLightData;
-                    if (ald != null)
+                    EditorGUILayout.Space();
+                    if (targets.Length > 1)
                     {
-                        Rect rect = EditorGUILayout.GetControlRect(true);
-                        float labelWidth = rect.x;
-                        rect = EditorGUI.IndentedRect(rect);
-                        labelWidth = EditorGUIUtility.labelWidth - (rect.x - labelWidth);
-                        GUI.Label(new Rect(rect.x, rect.y, labelWidth, rect.height), "Clip Planes");
-                        rect.width -= labelWidth; rect.x += labelWidth;
-                        if (GUI.Button(rect, "Create Clip Plane"))
-                            ald.AddClipPlane();
-                    
-                        EditorGUI.indentLevel++;
-                        labelWidth = EditorGUIUtility.labelWidth;
-                        EditorGUIUtility.labelWidth = 0;
-                        GUIContent removeLabel = new GUIContent("Remove", "Destroy the clip plane");
-                        float removeWidth = GUI.skin.button.CalcSize(removeLabel).x;
-                        const float hSpace = 2;
-                        var planes = ald.ClipPlanes;
-                        foreach (var p in planes)
+                        EditorGUILayout.HelpBox("Cannot edit Clip Planes for multi-object", MessageType.Info);
+                    }
+                    else
+                    {
+                        var ald = m_SerializedAdditionalLightData.targetObject as HDAdditionalLightData;
+                        if (ald != null)
                         {
-                            rect = EditorGUILayout.GetControlRect(true);
-                            rect.width -= removeWidth + hSpace;
-                            bool enabled = GUI.enabled;
-                            GUI.enabled = false;
-                            EditorGUI.ObjectField(rect, p, typeof(HDClipPlane), !EditorUtility.IsPersistent(target));
-                            GUI.enabled = enabled;
-                            rect.x += rect.width + hSpace; rect.width = removeWidth;
-                            if (GUI.Button(rect, removeLabel))
-                                Undo.DestroyObjectImmediate(p.gameObject);
+                            Rect rect = EditorGUILayout.GetControlRect(true);
+                            float labelWidth = rect.x;
+                            rect = EditorGUI.IndentedRect(rect);
+                            labelWidth = EditorGUIUtility.labelWidth - (rect.x - labelWidth);
+                            GUI.Label(new Rect(rect.x, rect.y, labelWidth, rect.height), "Clip Planes");
+                            rect.width -= labelWidth; rect.x += labelWidth;
+                            if (GUI.Button(rect, "Create Clip Plane"))
+                                ald.AddClipPlane();
+                        
+                            EditorGUI.indentLevel++;
+                            labelWidth = EditorGUIUtility.labelWidth;
+                            EditorGUIUtility.labelWidth = 0;
+                            GUIContent removeLabel = new GUIContent("Remove", "Destroy the clip plane");
+                            float removeWidth = GUI.skin.button.CalcSize(removeLabel).x;
+                            const float hSpace = 2;
+                            var planes = ald.ClipPlanes;
+                            foreach (var p in planes)
+                            {
+                                rect = EditorGUILayout.GetControlRect(true);
+                                rect.width -= removeWidth + hSpace;
+                                bool enabled = GUI.enabled;
+                                GUI.enabled = false;
+                                EditorGUI.ObjectField(rect, p, typeof(HDClipPlane), !EditorUtility.IsPersistent(target));
+                                GUI.enabled = enabled;
+                                rect.x += rect.width + hSpace; rect.width = removeWidth;
+                                if (GUI.Button(rect, removeLabel))
+                                    Undo.DestroyObjectImmediate(p.gameObject);
+                            }
+                            EditorGUIUtility.labelWidth = labelWidth;
+                            EditorGUI.indentLevel--;
                         }
-                        EditorGUIUtility.labelWidth = labelWidth;
-                        EditorGUI.indentLevel--;
                     }
                 }
             }
