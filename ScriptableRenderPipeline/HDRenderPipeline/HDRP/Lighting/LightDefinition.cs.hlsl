@@ -77,6 +77,9 @@ struct LightData
     int shadowIndex;
     float3 forward;
     int cookieIndex;
+    float2 unused0;
+    int clipPlaneIndex;
+    int clipPlaneCount;
     float3 right;
     float specularScale;
     float3 up;
@@ -206,6 +209,18 @@ float3 GetForward(LightData value)
 int GetCookieIndex(LightData value)
 {
 	return value.cookieIndex;
+}
+float2 GetUnused0(LightData value)
+{
+	return value.unused0;
+}
+int GetClipPlaneIndex(LightData value)
+{
+	return value.clipPlaneIndex;
+}
+int GetClipPlaneCount(LightData value)
+{
+	return value.clipPlaneCount;
 }
 float3 GetRight(LightData value)
 {

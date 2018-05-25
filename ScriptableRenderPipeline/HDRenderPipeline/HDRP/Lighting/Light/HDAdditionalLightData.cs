@@ -246,11 +246,11 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         // Clip Planes
         [HideInInspector, SerializeField]
-        private HDClipPlane[] m_ClipPlanes; // serialized to handle copy/paste
-        private HDClipPlane.Params[] m_ClipPlaneParams;
+        private HDLightClipPlane[] m_ClipPlanes; // serialized to handle copy/paste
+        private HDLightClipPlane.LightClipPlaneData[] m_ClipPlaneParams;
 
-        public HDClipPlane[] ClipPlanes { get { ValidateClipPlanes(); return m_ClipPlanes; } }
-        public HDClipPlane.Params[] ClipPlaneParams { get { ValidateClipPlanes(); return m_ClipPlaneParams; } }
+        public HDLightClipPlane[] ClipPlanes { get { ValidateClipPlanes(); return m_ClipPlanes; } }
+        public HDLightClipPlane.LightClipPlaneData[] ClipPlaneParams { get { ValidateClipPlanes(); return m_ClipPlaneParams; } }
 
         void InvalidateClipPlanes() { m_ClipPlanes = null; }
         void ValidateClipPlanes()
@@ -261,10 +261,10 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
                 // Did we just get copy/pasted?
                 if (m_ClipPlanes.Length > 0 && m_ClipPlanes[0].transform.parent != transform)
                 {
-                    var newPlanes = new HDClipPlane[m_ClipPlanes.Length];
+                    var newPlanes = new HDLightClipPlane[m_ClipPlanes.Length];
                     m_ClipPlanes.CopyTo(newPlanes, 0);
                     m_ClipPlanes = null;
-                    var oldPlanes = GetComponents<HDClipPlane>();
+                    var oldPlanes = GetComponents<HDLightClipPlane>();
                     foreach (var p in oldPlanes)
                         UnityEditor.Undo.DestroyObjectImmediate(p.gameObject);
                     foreach (var p in newPlanes)
@@ -274,7 +274,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 #endif
                     return;
             }
-            List<HDClipPlane> planes = new List<HDClipPlane>();
+            List<HDLightClipPlane> planes = new List<HDLightClipPlane>();
             GetComponentsInChildren(planes);
             for (int i = planes.Count-1; i >= 0; --i)
                 if (planes[i].transform.parent != transform)
@@ -282,15 +282,15 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             foreach (var p in planes)
             m_ClipPlanes = planes.ToArray();
             if (m_ClipPlanes == null)
-                m_ClipPlanes = new HDClipPlane[0];
-            m_ClipPlaneParams = new HDClipPlane.Params[m_ClipPlanes.Length];
+                m_ClipPlanes = new HDLightClipPlane[0];
+            m_ClipPlaneParams = new HDLightClipPlane.LightClipPlaneData[m_ClipPlanes.Length];
             for (int i = 0; i < m_ClipPlanes.Length; ++i)
 			    m_ClipPlaneParams[i] = m_ClipPlanes[i].ClipParams;
         }
 
-        public HDClipPlane AddClipPlane(HDClipPlane copyFrom = null)
+        public HDLightClipPlane AddClipPlane(HDLightClipPlane copyFrom = null)
         {
-            GameObject go = new GameObject("Clip Plane", typeof(HDClipPlane));
+            GameObject go = new GameObject("Clip Plane", typeof(HDLightClipPlane));
 #if UNITY_EDITOR
             Undo.RegisterCreatedObjectUndo(go, "Add Clip Plane");
             Undo.SetTransformParent(go.transform, transform, "Add Clip Plane");
@@ -298,7 +298,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 #else
             go.transform.parent = transform.parent;
 #endif
-            var plane = go.GetComponent<HDClipPlane>();
+            var plane = go.GetComponent<HDLightClipPlane>();
             if (copyFrom == null)
             {
                 plane.transform.localPosition = Vector3.zero;

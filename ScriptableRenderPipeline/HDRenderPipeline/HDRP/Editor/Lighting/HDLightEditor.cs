@@ -491,7 +491,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                                 rect.width -= removeWidth + hSpace;
                                 bool enabled = GUI.enabled;
                                 GUI.enabled = false;
-                                EditorGUI.ObjectField(rect, p, typeof(HDClipPlane), !EditorUtility.IsPersistent(target));
+                                EditorGUI.ObjectField(rect, p, typeof(HDLightClipPlane), !EditorUtility.IsPersistent(target));
                                 GUI.enabled = enabled;
                                 rect.x += rect.width + hSpace; rect.width = removeWidth;
                                 if (GUI.Button(rect, removeLabel))

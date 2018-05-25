@@ -1,20 +1,24 @@
 ﻿namespace UnityEngine.Experimental.Rendering
 {
-    public class HDClipPlane : MonoBehaviour
+    public class HDLightClipPlane : MonoBehaviour
     {
         [Tooltip("How much to feather the clipped edge")]
 	    public float m_Feather = 1.0f;
 
-	    public struct Params
+        [GenerateHLSL]
+	    public struct LightClipPlaneData
 	    {
 		    public Vector4 plane;
-		    public float feather;
+
+		    public float   feather;
+            public Vector3 unused;
 	    }
-        public Params ClipParams
+
+        public LightClipPlaneData ClipParams
         { 
             get 
             { 
-                return new Params 
+                return new LightClipPlaneData 
                 { 
                     plane = GetClipPlaneVector(), 
                     feather = m_Feather * 0.1f

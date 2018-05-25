@@ -113,6 +113,14 @@ float4 EvaluateCookie_Punctual(LightLoopContext lightLoopContext, LightData ligh
     return cookie;
 }
 
+half ShadowPlane(half3 worldPos, half4 plane, half feather)
+{
+	half x = plane.w - dot(worldPos, plane.xyz);
+	// Compiler bug workaround
+	x += 0.0001;
+	return smoothstep(0, feather, x);
+}
+
 // None of the outputs are premultiplied.
 // distances = {d, d^2, 1/d, d_proj}, where d_proj = dot(lightToSample, lightData.forward).
 void EvaluateLight_Punctual(LightLoopContext lightLoopContext, PositionInputs posInput,
@@ -127,6 +135,14 @@ void EvaluateLight_Punctual(LightLoopContext lightLoopContext, PositionInputs po
     color       = lightData.color;
     attenuation = SmoothPunctualLightAttenuation(distances, lightData.invSqrAttenuationRadius,
                                                  lightData.angleScale, lightData.angleOffset);
+
+
+    for(int i = lightData.clipPlaneIndex; i < lightData.clipPlaneIndex + lightData.clipPlaneCount; i++)
+    {
+        attenuation *= ShadowPlane(GetAbsolutePositionWS(positionWS),
+                                   GetPlane  (_LightClipPlaneDatas[i]),
+                                   GetFeather(_LightClipPlaneDatas[i]));
+    }
 
 #if (SHADEROPTIONS_VOLUMETRIC_LIGHTING_PRESET != 0)
     // TODO: sample the extinction from the density V-buffer.

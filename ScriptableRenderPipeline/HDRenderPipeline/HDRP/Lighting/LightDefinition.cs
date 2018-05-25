@@ -70,6 +70,10 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public Vector3 forward;
         public int cookieIndex; // -1 if unused
 
+        public Vector2 unused0;
+        public int clipPlaneIndex;
+        public int clipPlaneCount;
+
         public Vector3 right;   // If spot: rescaled by cot(outerHalfAngle); if projector: rescaled by (2 / shapeWidth)
         public float specularScale;
 
