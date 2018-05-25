@@ -113,11 +113,14 @@ float4 EvaluateCookie_Punctual(LightLoopContext lightLoopContext, LightData ligh
     return cookie;
 }
 
+//ref: https://github.com/Unity-Technologies/VolumetricLighting
 half ShadowPlane(half3 worldPos, half4 plane, half feather)
 {
 	half x = plane.w - dot(worldPos, plane.xyz);
 	// Compiler bug workaround
 	x += 0.0001;
+
+    //Smoothstep from 0.
 	return smoothstep(0, feather, x);
 }
 
