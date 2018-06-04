@@ -240,8 +240,13 @@ namespace UnityEditor.ShaderGraph.Drawing
         {
             if (evt.target is Node)
             {
+#if UNITY_2018_3_OR_NEWER
+                evt.menu.AppendAction("Copy Shader", CopyToClipboard, node.hasPreview ? DropdownMenu.MenuAction.StatusFlags.Normal : DropdownMenu.MenuAction.StatusFlags.Hidden);
+                evt.menu.AppendAction("Show Generated Code", ShowGeneratedCode, node.hasPreview ? DropdownMenu.MenuAction.StatusFlags.Normal : DropdownMenu.MenuAction.StatusFlags.Hidden);
+#else
                 evt.menu.AppendAction("Copy Shader", CopyToClipboard, node.hasPreview ? ContextualMenu.MenuAction.StatusFlags.Normal : ContextualMenu.MenuAction.StatusFlags.Hidden);
                 evt.menu.AppendAction("Show Generated Code", ShowGeneratedCode, node.hasPreview ? ContextualMenu.MenuAction.StatusFlags.Normal : ContextualMenu.MenuAction.StatusFlags.Hidden);
+#endif
             }
 
             base.BuildContextualMenu(evt);

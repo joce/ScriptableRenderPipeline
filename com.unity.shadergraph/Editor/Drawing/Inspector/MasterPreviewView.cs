@@ -170,10 +170,18 @@ namespace UnityEditor.ShaderGraph.Drawing.Inspector
             {
                 if (m_DoNotShowPrimitives.Contains(primitiveTypeName))
                     continue;
+#if UNITY_2018_3_OR_NEWER
+                evt.menu.AppendAction(primitiveTypeName, e => ChangePrimitiveMesh(primitiveTypeName), DropdownMenu.MenuAction.AlwaysEnabled);
+#else
                 evt.menu.AppendAction(primitiveTypeName, e => ChangePrimitiveMesh(primitiveTypeName), ContextualMenu.MenuAction.AlwaysEnabled);
+#endif
             }
 
+#if UNITY_2018_3_OR_NEWER
+            evt.menu.AppendAction("Custom Mesh", e => ChangeMeshCustom(), DropdownMenu.MenuAction.AlwaysEnabled);
+#else
             evt.menu.AppendAction("Custom Mesh", e => ChangeMeshCustom(), ContextualMenu.MenuAction.AlwaysEnabled);
+#endif
         }
 
         IMasterNode masterNode
