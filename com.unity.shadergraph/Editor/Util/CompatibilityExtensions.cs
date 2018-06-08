@@ -9,7 +9,6 @@ namespace UnityEditor.ShaderGraph.Drawing
 {
     static class CompatibilityExtensions
     {
-
         public static void AppendAction(this ContextualMenu contextualMenu, string actionName, Action action, Func<ContextualMenu.MenuAction.StatusFlags> actionStatusCallback)
         {
             Debug.Assert(action != null);
